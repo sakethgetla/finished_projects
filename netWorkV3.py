@@ -232,23 +232,30 @@ def gameLoop():
 
 
 def d_dxCalError(yExpexted, yOutput):
-    return (yExpexted - yOutput)
+    # cross entropy cost function
+    return (yExpexted/yOutput)+((yExpexted-1)/(1-yOutput))
+    #return (yExpexted - yOutput)
 
 def d_ds(yExpexted):
 
     matxOnes = np.ones((3,2))
     print("matxOnes")
     print(matxOnes)
+    print(type(matxOnes))
     print("expexted output")
     print(yExpexted)
+    print(type(yExpexted[0]))
+    print("matxOutputs[2,0]")
+    print(matxOutputs[2,0])
+    print(type(matxOutputs[2,0]))
 
     out = (matxOutputs[1,0] * matxWeights[2,0]) +  (matxOutputs[1,1] * matxWeights[2,1])
 
-    matxOnes[2,0] = (-1)*(yExpexted - matxOutputs[2,0]) * d_dxSigmoid(out) * matxOutputs[1,0]
-    matxOnes[2,1] = (-1)*(yExpexted - matxOutputs[2,0]) * d_dxSigmoid(out) * matxOutputs[1,1]
+    matxOnes[2,0] = (-1)*d_dxCalError(yExpexted[0] , matxOutputs[2,0]) * d_dxSigmoid(out) * matxOutputs[1,0]
+    matxOnes[2,1] = (-1)*d_dxCalError(yExpexted[0] , matxOutputs[2,0]) * d_dxSigmoid(out) * matxOutputs[1,1]
 
-    d_dh0 = (-1)*(yExpexted - matxOutputs[2,0]) * d_dxSigmoid(out) * matxWeights[2,0]
-    d_dh1 = (-1)*(yExpexted - matxOutputs[2,0]) * d_dxSigmoid(out) * matxWeights[2,1]
+    d_dh0 = (-1)*d_dxCalError(yExpexted[0] , matxOutputs[2,0]) * d_dxSigmoid(out) * matxWeights[2,0]
+    d_dh1 = (-1)*d_dxCalError(yExpexted[0] , matxOutputs[2,0]) * d_dxSigmoid(out) * matxWeights[2,1]
 
     out = (matxOutputs[0,0] * matxWeights[0,0] ) + vecBais[0] + (matxOutputs[0,1] * matxWeights[0,1]) 
     matxOnes[0,0] = d_dh0 * d_dxSigmoid(out) * matxOutputs[0,0]
@@ -265,7 +272,7 @@ def run(trainingSet):
     global error
     global d_dv
     global matxDs
-
+    
     calResult(trainingSet[0])
     a =  calError(trainingSet[1])
     error += a
@@ -278,8 +285,8 @@ def run(trainingSet):
 def d_dvs(yExpexted):
 
     out = (matxOutputs[1,0] * matxWeights[2,0]) +  (matxOutputs[1,1] * matxWeights[2,1])
-    d_dh0 = (-1)*(yExpexted - matxOutputs[2,0]) * d_dxSigmoid(out) * matxWeights[2,0]
-    d_dh1 = (-1)*(yExpexted - matxOutputs[2,0]) * d_dxSigmoid(out) * matxWeights[2,1]
+    d_dh0 = (-1)*d_dxCalError(yExpexted[0] , matxOutputs[2,0]) * d_dxSigmoid(out) * matxWeights[2,0]
+    d_dh1 = (-1)*d_dxCalError(yExpexted[0] , matxOutputs[2,0]) * d_dxSigmoid(out) * matxWeights[2,1]
 
     out = (matxOutputs[0,0] * matxWeights[0,0] ) + vecBais[0] + (matxOutputs[0,1] * matxWeights[0,1]) 
     vex = np.zeros(2)
