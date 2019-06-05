@@ -1,3 +1,4 @@
+# visual neural network that learns from logic gates 2 inputs and 1 output
 import matplotlib.image as mpimg
 import pygame
 import math
